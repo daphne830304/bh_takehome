@@ -154,4 +154,11 @@ Elapsed time: 0 seconds'''
 
   
 if __name__ == '__main__':
-    unittest.main()
+    # unittest.main()
+    runner('testcase0.json')
+    print('end of test0')
+    runner('testcase1.json')
+    print('end of test1')
+    runner('testcase2.json')
+    print('end of test2')
+    
