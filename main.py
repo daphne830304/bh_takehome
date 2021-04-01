@@ -57,7 +57,7 @@ def runner(json_file):
         return 
     visited = set()
     queue = [find_start(dag)]  
-
+    queue_thread = []
     while queue:
         current = queue.pop(0)
         visited.add(current)
@@ -67,24 +67,40 @@ def runner(json_file):
         if dag[current]['edges']:  #if node has children
 
             t = threading.Timer(0,print_nodes,[current])  
-            thread_list = [t]
+            # thread_list = [t]
+            queue_thread.append(t)
 
-            for key in dag[current]['edges']:
-               
+            sorted_edges = []
+            sorted_edges = sorted(dag[current]['edges'].items(),key= lambda x : x[0])
+
+
+            for tups in sorted_edges:
+                key, time = tups
+
                 if key not in visited:
                     queue.append(key)
                     visited.add(key)
 
-                    time = dag[current]['edges'][key]
+                    # time = dag[current]['edges'][key]
                     
                     edges = threading.Timer(time,print_edges,[key])
-                    thread_list.append(edges)
+                    edges.start()
+                    queue_thread.append(edges)
+                    # thread_list.append(edges)
+            queue_thread.pop().join()
+            timer.stop()
 
-            for i in thread_list:
-                i.start()
-            for i in thread_list:
-                i.join()
-                timer.stop()
+         
+            # for i in thread_list:
+            #     i.join()
+            #     timer.stop()
+      
+
+            # for i in thread_list:
+            #     i.start()
+            # for i in thread_list:
+            #     i.join()
+            #     timer.stop()
       
   
 class TestRunner(unittest.TestCase):
@@ -155,10 +171,12 @@ Elapsed time: 0 seconds'''
   
 if __name__ == '__main__':
     # unittest.main()
-    runner('testcase0.json')
-    print('end of test0')
-    runner('testcase1.json')
-    print('end of test1')
-    runner('testcase2.json')
-    print('end of test2')
+    # runner('testcase0.json')
+    # print('end of test0')
+    # runner('testcase1.json')
+    # print('end of test1')
+    # runner('testcase2.json')
+    # print('end of test2')
+    runner('testcase3.json')
+    
     
